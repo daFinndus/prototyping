@@ -19,7 +19,9 @@ while True:
             toggled = not toggled
             green_led.set_intensity(255 if toggled else 0)
             red_led.set_intensity(0 if toggled else 255)
-            sleep(1)
+
+            # Sleep is necessary to prevent multiple button presses
+            sleep(0.25)
         elif toggled:
             motor.do_clockwise_degrees(1)
     except KeyboardInterrupt:
