@@ -21,11 +21,12 @@ while True:
             red_led.set_intensity(0 if toggled else 255)
 
             # Sleep is necessary to prevent multiple button presses
-            sleep(0.25)
+            sleep(0.15)
         elif toggled:
-            motor.do_clockwise_degrees(1)
+            motor.run_as_fast_as_it_can()
     except KeyboardInterrupt:
-        motor.clean_up_gpio()
-        green_led.clean_up_gpio()
-        red_led.clean_up_gpio()
+        print("KeyboardInterrupt detected. Exiting...")
+        break
+    except Exception as e:
+        print("Error in main loop: " + e)
         break

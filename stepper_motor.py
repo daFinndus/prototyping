@@ -28,7 +28,9 @@ class StepperMotor:
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, 0)
 
-        self.__delay_after_step = 1 / 400  # Delay after each step in Hz
+        self.step_counter = 0  # Counter for the run_as_fast_as_it_can function
+
+        self.__delay_after_step = 1 / 1000  # Delay after each step in Hz
         self.debug_mode = False  # Boolean for some debug messages
 
     # Function to set the delay after each step
@@ -73,9 +75,21 @@ class StepperMotor:
         steps = int(degrees / (5.625 / 64))
         self.do_counterclockwise_step(steps)
 
+    # Function to run the motor as fast as it can
+    def run_as_fast_as_it_can(self):
+        motor_step = self.step_counter % len(self.__STEP_SEQUENCE)
+        for pin in range(4):
+            GPIO.output(self.__pins[pin], self.__STEP_SEQUENCE[motor_step][pin])
+        self.step_counter += 1
+        time.sleep(self.__delay_after_step)
+
     # Function to clean up all pins
     def clean_up_gpio(self):
         for pin in self.__pins:
             GPIO.output(pin, 0)
         GPIO.cleanup()
+        print("Cleaned up all pins.")
+
+    def __del__(self):
+        self.clean_up_gpio()
         print("Cleaned up all pins.")

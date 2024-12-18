@@ -45,3 +45,7 @@ class LED:
     def clean_up_gpio():
         GPIO.cleanup()
         print(f"Changed all pins to IN.")
+
+    def __del__(self):
+        self.clean_up_gpio()
+        print("Cleaned up all pins.")
